@@ -7,12 +7,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import ru.job4j.order.dto.OrderDto;
 import ru.job4j.order.model.Order;
-import ru.job4j.order.model.Product;
 import ru.job4j.order.model.Status;
 import ru.job4j.order.repository.OrderRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Data
@@ -32,8 +29,17 @@ public class OrderService {
         this.products = products;
     }
 
-    public void save(Order order) {
+    public void saveOut(Order order) {
+        OrderDto orderDto = getDtoFromOrder(order);
         orders.save(order);
+        kafkaTemplateO.send("preorder", order.getId(), orderDto);
+        kafkaTemplateS.send("messengers", order.getId(), order.getStatus().getName());
+    }
+
+    public void saveIn(ConsumerRecord<Integer, String> record) {
+        Order order = msgFromKitchen(record);
+        orders.save(order);
+        kafkaTemplateS.send("messengers", order.getId(), order.getStatus().getName());
     }
 
     public Order findById(int id) {
@@ -49,38 +55,18 @@ public class OrderService {
         return order;
     }
 
-    public void sendToNote(Integer orderId, Order order) {
-        Status status = statuses.findById(1);
-        order.setStatus(status);
-        kafkaTemplateS.send("messengers", orderId, order.getStatus().getName());
+    private OrderDto getDtoFromOrder(Order order) {
+        OrderDto orderDto = new OrderDto();
+        orderDto.setId(order.getId());
+        orderDto.setStatus(order.getStatus());
+        return orderDto;
     }
 
-    public void sendToKitchen(Integer orderId, OrderDto order) {
-        order = new OrderDto();
-        creationOrderTrain(order);
-        kafkaTemplateO.send("preorder", orderId, order);
-    }
-
-    public void msgFromKitchen(ConsumerRecord<Integer, Integer> record) {
+    private Order msgFromKitchen(ConsumerRecord<Integer, String> record) {
         int id = record.key();
         Order order = findById(id);
-        Status status = statuses.findById(record.value());
+        Status status = statuses.findByName(record.value());
         order.setStatus(status);
-        orders.save(order);
-    }
-
-    private void creationOrderTrain(OrderDto order) {
-        Status status = new Status();
-        status.setId(1);
-        status.setName("принят");
-        order.setStatus(status);
-        List<Product> productSet = new ArrayList<>();
-        Product product1 = new Product();
-        product1.setName("молоко");
-        Product product2 = new Product();
-        product2.setName("мясо");
-        productSet.add(product1);
-        productSet.add(product2);
-        order.setProducts(productSet);
+        return order;
     }
 }
