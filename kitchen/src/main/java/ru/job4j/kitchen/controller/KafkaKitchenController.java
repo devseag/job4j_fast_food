@@ -1,4 +1,4 @@
-package ru.job4j.notification.controller;
+package ru.job4j.kitchen.controller;
 
 import lombok.AllArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -6,17 +6,17 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.job4j.notification.service.NotificationService;
+import ru.job4j.kitchen.service.OrderService;
 
 @EnableKafka
 @Controller
+@RequestMapping("kitchen")
 @AllArgsConstructor
-@RequestMapping("notification")
-public class KafkaNotificationController {
-    private final NotificationService service;
+public class KafkaKitchenController {
+    private final OrderService orders;
 
-    @KafkaListener(topics = "messengers")
-    public void msgListener(ConsumerRecord<Integer, String> record) {
-        service.msgListener(record);
+    @KafkaListener(topics = "preorder")
+    public void msgFromOrder(ConsumerRecord<Integer, String> record) {
+        orders.msgFromOrder(record);
     }
 }
