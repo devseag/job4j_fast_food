@@ -1,15 +1,13 @@
 package ru.job4j.kitchen.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -25,9 +23,14 @@ public class Order {
 
     @ManyToMany
     @JoinTable(
-            name = "orders_products",
+            name = "orders_dishes",
             joinColumns = { @JoinColumn(name = "order_id") },
-            inverseJoinColumns = { @JoinColumn(name = "product_id") }
+            inverseJoinColumns = { @JoinColumn(name = "dish_id") }
     )
-    private List<Product> products = new ArrayList<>();
+    private List<Dish> dishes = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Order{" + "status=" + status + ", dishes=" + dishes + '}';
+    }
 }

@@ -1,39 +1,39 @@
 package ru.job4j.kitchen.service;
 
-import lombok.Data;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import ru.job4j.kitchen.model.Dish;
 import ru.job4j.kitchen.model.Order;
 import ru.job4j.kitchen.model.Status;
 import ru.job4j.kitchen.repository.OrderRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
-@Data
 @Service
 public class OrderService {
-    private final OrderRepository orders;
-    private final ProductService foodStock;
-    private final StatusService statuses;
+    private final OrderRepository orderRepository;
+    private final DishService dishService;
+    private final StatusService statusService;
 
     @Autowired
     private KafkaTemplate<Integer, String> kafkaTemplate;
 
-    public OrderService(OrderRepository orders, ProductService foodStock, StatusService statuses) {
-        this.orders = orders;
-        this.foodStock = foodStock;
-        this.statuses = statuses;
+    public OrderService(OrderRepository orderRepository, DishService dishService, StatusService statusService) {
+        this.orderRepository = orderRepository;
+        this.dishService = dishService;
+        this.statusService = statusService;
     }
 
     public void save(Order order) {
-        orders.save(order);
+        orderRepository.save(order);
     }
 
     public Order findById(int id) {
-        Optional<Order> optionalOrder = orders.findById(id);
+        Optional<Order> optionalOrder = orderRepository.findById(id);
         Order order = new Order();
         if (optionalOrder.isPresent()) {
             order = optionalOrder.get();
@@ -45,49 +45,57 @@ public class OrderService {
         return order;
     }
 
-    public void sendToOrder(Integer orderId, String statusName) {
-        kafkaTemplate.send("cooked_order", orderId, statusName);
-    }
-
     public void msgFromOrder(ConsumerRecord<Integer, String> record) {
         Order order = new Order();
         order.setId(record.key());
-        Status status = statuses.findByName(getStatusFromJson(record.value()));
+        order.setStatus(statusService.findById(1));
+        List<Dish> dishes = getDishesFromRecord(record.value());
+        order.setDishes(dishes);
+        sendToDish(order);
+    }
+
+    public void sendToDish(Order order) {
+        kafkaTemplate.send("from_kitchen_to_dish", order.getId(), order.getDishes().toString());
+    }
+
+    public void msgFromDish(ConsumerRecord<Integer, String> record) {
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        System.out.println(record.value());
+        Order order = new Order();
+        Status status;
+        List<Dish> dishes;
+        order.setId(record.key());
+        if (!"null".equals(record.value())) {
+            dishes = getDishesFromRecord(record.value());
+            status = statusService.findById(3);
+        } else {
+            dishes = null;
+            status = statusService.findById(2);
+        }
+        order.setDishes(dishes);
         order.setStatus(status);
         save(order);
-        try {
-            Thread.sleep(60000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Random random = new Random();
-        boolean productEnough = random.nextBoolean();
-        if (!productEnough) {
-            Status statusNo = statuses.findById(2);
-            order.setStatus(statusNo);
-            save(order);
-        } else {
-            Status statusNo = statuses.findById(5);
-            order.setStatus(statusNo);
-            save(order);
-        }
-        sendToOrder(order.getId(), order.getStatus().getName());
+        sendToOrder(order);
     }
 
-    private String getStatusFromJson(String str) {
-        String[] array = str.split(":");
-        int i = findI(array);
-        String[] statusArray = array[i + 3].split(",");
-        return statusArray[0].substring(1, statusArray[0].length() - 1);
+    public void sendToOrder(Order order) {
+        kafkaTemplate.send("from_kitchen_to_order", order.getId(), order.toString());
     }
 
-    private int findI(String[] array) {
-        int rsl = -1;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i].contains("status")) {
-                rsl = i;
+    private List<Dish> getDishesFromRecord(String str) {
+        List<Dish> dishes = new ArrayList<>();
+        String[] array = str.substring(1, str.length() - 1).split(",");
+        for (String element : array) {
+            String name = element.replaceAll(" ", "");
+            Dish dish;
+            if (!"Блюдо закончилось!".equals(name) && !"Блюдо не найдено!".equals(name)) {
+                dish = dishService.findByName(name);
+            } else {
+                dish = new Dish();
+                dish.setName(name);
             }
+            dishes.add(dish);
         }
-        return rsl;
+        return dishes;
     }
 }
