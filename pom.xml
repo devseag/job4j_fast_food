@@ -28,6 +28,10 @@
         <module>notification</module>
         <module>domain</module>
         <module>client</module>
+        <module>source</module>
+        <module>resttemplate</module>
+        <module>openfeign</module>
+        <module>webclient</module>
     </modules>
 
     <properties>
