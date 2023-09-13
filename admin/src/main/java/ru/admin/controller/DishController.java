@@ -22,7 +22,7 @@ public class DishController {
     @GetMapping("/allNotEnough")
     public String showNotEnough(Model model) {
         model.addAttribute("dishes", dishService.findAllNotEnough());
-        return "dish/dishesNotEnough";
+        return "dish/dishes";
     }
 
     @GetMapping("/{id}")
@@ -40,7 +40,7 @@ public class DishController {
     @PostMapping("/update")
     public String updateDishPost(@ModelAttribute Dish dish) {
         dishService.save(dish);
-        return "redirect:/dishes/all";
+        return "redirect:/admin/dishes/all";
     }
 
     @GetMapping("/create")
@@ -52,13 +52,13 @@ public class DishController {
     @PostMapping("/create")
     public String addDishPost(@ModelAttribute Dish dish) {
         dishService.save(dish);
-        return "redirect:/dishes/all";
+        return "redirect:/admin/dishes/all";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteDishGet(@PathVariable("id") int id) {
         Dish dish = dishService.findById(id);
         dishService.delete(dish);
-        return "redirect:/dishes/all";
+        return "redirect:/admin/dishes/all";
     }
 }

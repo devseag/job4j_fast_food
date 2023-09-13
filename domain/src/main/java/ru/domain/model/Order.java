@@ -22,7 +22,7 @@ public class Order {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private User customer;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

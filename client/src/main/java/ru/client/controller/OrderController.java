@@ -29,7 +29,7 @@ public class OrderController {
     @GetMapping("/new-order")
     public String createOrder(Model model) {
         model.addAttribute("order",
-                new Order(0, null, null, "Заполните поле", null));
+                new Order(0, null, null, "Zapolnite pole", null));
         model.addAttribute("allDishes", dishService.findAll());
         return "order/createOrder";
     }

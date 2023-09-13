@@ -56,8 +56,8 @@ public class SimpleOrderService implements OrderService {
             for (String str : dishIds) {
                 int dishId = Integer.parseInt(str);
                 Dish dish = dishService.findById(dishId);
-                if (dish.getName().equals("Блюдо не найдено!")) {
-                    System.out.println("Блюдо не найдено!");
+                if (dish.getName().equals("Bljudo ne najdeno!")) {
+                    System.out.println("Bljudo ne najdeno!");
                     return false;
                 }
                 dishes.add(dish);

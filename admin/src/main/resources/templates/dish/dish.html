@@ -11,74 +11,74 @@
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <title>Заказ</title>
+    <title>Zakaz</title>
 </head>
 <body>
 <div class="alert alert-warning">
     <nav class="navbar navbar-expand-lg alert alert-primary">
-        <!--   <a class="navbar-brand" href="#">Происшествия</a>
+        <!--   <a class="navbar-brand" href="#">Proisshestvija</a>
            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                <span class="navbar-toggler-icon"></span>
            </button> -->
         <!--     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                  <div class="navbar-nav" >
-                     <a class="nav-item nav-link" th:href="@{/registration}">Добавить пользователя</a>
+                     <a class="nav-item nav-link" th:href="@{/registration}">Dobavit' pol'zovatelja</a>
                      <span th:text="${user.username}"></span>
-                     <a class="nav-item nav-link" th:href="@{/logout}">Выйти</a>
+                     <a class="nav-item nav-link" th:href="@{/logout}">Vyjti</a>
                      </a>
                  </div>
              </div>  -->
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link" th:href="@{/registration}">Добавить пользователя</a>
+                <a class="nav-item nav-link" th:href="@{/registration}">Dobavit' pol'zovatelja</a>
                 <!--   <span th:text="${user.username}"></span> -->
-                <a class="nav-item nav-link" th:href="@{/logout}">Выйти</a>
-                <a class="nav-item nav-link" th:href="@{/admin/dishes/all}">Блюда</a>
-                <a class="nav-item nav-link" th:href="@{/admin/orders/all}">Заказы</a>
-                <a class="nav-item nav-link" th:href="@{/admin/clients/all}">Клиенты</a>
+                <a class="nav-item nav-link" th:href="@{/logout}">Vyjti</a>
+                <a class="nav-item nav-link" th:href="@{/admin/dishes/all}">Bljuda</a>
+                <a class="nav-item nav-link" th:href="@{/admin/orders/all}">Zakazy</a>
+                <a class="nav-item nav-link" th:href="@{/admin/clients/all}">Klienty</a>
             </div>
         </div>
     </nav>
     <nav class="navbar navbar-expand-lg alert alert-primary">
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link" th:href="@{/admin/dishes/all}">Все блюда</a>
+                <a class="nav-item nav-link" th:href="@{/admin/dishes/all}">Vse bljuda</a>
             </div>
             <div class="navbar-nav">
-                <a class="nav-item nav-link" th:href="@{/admin/dishes/allNotEnough}">Блюда, которые закончились</a>
+                <a class="nav-item nav-link" th:href="@{/admin/dishes/allNotEnough}">Bljuda, kotorye zakonchilis'</a>
             </div>
         </div>
     </nav>
     <div class="row pt-3">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Блюдо
+                Bljudo
             </div>
             <div>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col"># блюда</th>
-                            <th scope="col">Название</th>
-                            <th scope="col">Количество</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td width="10%" th:text="${dish.id}" />
-                            <td width="40%" th:text="${dish.name}" />
-                            <td width="40%" th:text="${dish.amount}" />
-                        </tr>
-                        </tbody>
-                    </table>
-                    <td>
-                        <a th:href="@{|/dishes/update/${dish.id}|}">
-                            <button type="button" class="btn btn-primary">Редактировать</button>
-                        </a>
-                        <a th:href="@{|/dishes/delete/${dish.id}|}">
-                            <button type="button" class="btn btn-primary">Удалить</button>
-                        </a>
-                    </td>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col"># bljuda</th>
+                        <th scope="col">Nazvanie</th>
+                        <th scope="col">Kolichestvo</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td width="10%" th:text="${dish.id}" />
+                        <td width="40%" th:text="${dish.name}" />
+                        <td width="40%" th:text="${dish.amount}" />
+                    </tr>
+                    </tbody>
+                </table>
+                <td>
+                    <a th:href="@{|/admin/dishes/update/${dish.id}|}">
+                        <button type="button" class="btn btn-primary">Redaktirovat'</button>
+                    </a>
+                    <a th:href="@{|/admin/dishes/delete/${dish.id}|}">
+                        <button type="button" class="btn btn-primary">Udalit'</button>
+                    </a>
+                </td>
             </div>
 
         </div>

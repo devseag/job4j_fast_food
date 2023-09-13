@@ -30,7 +30,7 @@ public class SimpleDishService implements DishService {
         if (optionalDish.isPresent()) {
             dish = optionalDish.get();
         } else {
-            dish.setName("Блюдо не найдено!");
+            dish.setName("Bljudo ne najdeno!");
         }
         return dish;
     }

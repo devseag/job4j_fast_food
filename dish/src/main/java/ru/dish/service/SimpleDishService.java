@@ -31,7 +31,7 @@ public class SimpleDishService implements DishService {
         for (Dish dish : dishList) {
             if (dish.getAmount() == 0) {
                 dish = new Dish();
-                dish.setName("Блюдо закончилось!");
+                dish.setName("Bljudo zakonchilos'!");
                 dish.setPrice(0);
             } else {
                 int amount = dish.getAmount();

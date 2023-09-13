@@ -20,7 +20,7 @@ public class SimpleDishService implements DishService {
         if (optionalProduct.isPresent()) {
             product = optionalProduct.get();
         } else {
-            product.setName("Продукт не найден!");
+            product.setName("Produkt ne najden!");
         }
         return product;
     }

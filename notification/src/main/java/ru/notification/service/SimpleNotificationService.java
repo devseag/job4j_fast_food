@@ -14,7 +14,7 @@ public class SimpleNotificationService implements NotificationService {
     public void save(int id, String str) {
         Notification note = new Notification();
         note.setId(id);
-        String massage = "Заказ № " + id + " " + str;
+        String massage = "Zakaz № " + id + " " + str;
         note.setMassage(massage);
         notificationRepository.save(note);
     }

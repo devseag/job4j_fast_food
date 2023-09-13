@@ -1,10 +1,10 @@
 package ru.domain.model;
 
 public enum Status {
-    ACCEPTED("принят"), CANCELED("отменён"), WAIT_PAY("ожидает оплату"),
-    PAYED("оплачен"), COOKING("готовится"),
-    READY_FOR_DELIVERY("готов к выдаче"), DELIVERING("доставляется"),
-    DELIVERED("доставлен"), NOT_FOUND("не найден");
+    ACCEPTED("prinjat"), CANCELED("otmenjon"), WAIT_PAY("ozhidaet oplatu"),
+    PAYED("oplachen"), COOKING("gotovitsja"),
+    READY_FOR_DELIVERY("gotov k vydache"), DELIVERING("dostavljaetsja"),
+    DELIVERED("dostavlen"), NOT_FOUND("ne najden");
 
     private final String str;
 

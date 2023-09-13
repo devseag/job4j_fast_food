@@ -27,8 +27,8 @@ public class SimpleOrderService implements OrderService  {
                 e.printStackTrace();
             }
             /**
-             * Запуск приготовления заказа
-            */
+             * Zapusk prigotovlenija zakaza
+             */
             order.setStatus(Status.READY_FOR_DELIVERY);
             orderRepository.save(order);
         }

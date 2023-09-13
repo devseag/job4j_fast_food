@@ -16,10 +16,10 @@ public class SimpleOrderService implements OrderService {
 
     @Override
     public void msgFromOrder(int id, String str) {
-        if ("ожидает оплату".equals(str)) {
+        if ("ozhidaet oplatu".equals(str)) {
             Order order = findById(id);
             /**
-             * Запуск оплаты заказа
+             * Execution order payment
              */
             try {
                 Thread.sleep(10000);
